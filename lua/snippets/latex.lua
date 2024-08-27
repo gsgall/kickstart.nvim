@@ -12,7 +12,46 @@ ls.add_snippets('tex', {
     t '\\section{',
     i(1),
     t '}',
-    i(2),
+    i(0),
+  }),
+  s('ssec', {
+    t '\\subsection{',
+    i(1),
+    t '}',
+    i(0),
+  }),
+  s('sssec', {
+    t '\\subsubsection{',
+    i(1),
+    t '}',
+    i(0),
+  }),
+  s('eq', {
+    t { '\\begin{equation}', '  ' },
+    i(1),
+    t { '', '\\end{equation}', '' },
+    i(0),
+  }),
+  s('ilist', {
+    t { '\\begin{itemize}', '  ' },
+    i(1),
+    t { '', '\\end{itemize}', '' },
+    i(0),
+  }),
+  s('elist', {
+    t { '\\begin{enumerate}', '  ' },
+    i(1),
+    t { '', '\\end{enumerate}', '' },
+    i(0),
+  }),
+  s('newday', {
+    t { '\\newpage', '\\section{' },
+    f(function()
+      return os.date '%m/%d/%Y' -- Inserts the current date in MM/DD/YYYY format
+    end),
+    t { '}', '\\subfile{sections/' },
+    i(1, 'file'), -- Placeholder for the subfile name
+    t { '}', '' },
   }),
 })
 
