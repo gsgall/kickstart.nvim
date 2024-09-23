@@ -256,6 +256,14 @@ ls.add_snippets('tex', {
     t { '\\textwidth}', '' },
     i(0),
   }),
+  s('frame', {
+    t { '\\begin{frame}{' },
+    i(1),
+    t { '}', '  ' },
+    i(2),
+    t { '', '\\end{frame}' },
+    i(0),
+  }),
 })
 
 vim.api.nvim_create_autocmd('FileType', {
