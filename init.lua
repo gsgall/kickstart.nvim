@@ -158,7 +158,10 @@ require('lazy').setup({
       local npairs = require 'nvim-autopairs'
       local Rule = require 'nvim-autopairs.rule'
 
-      npairs.setup()
+      npairs.setup {
+        map_c_h = true, -- Enable the <C-h> mapping
+        map_c_l = true, -- Enable the <C-l> mapping
+      }
 
       -- Custom rule for $$ in TeX documents
       npairs.add_rules {
