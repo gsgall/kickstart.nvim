@@ -7,19 +7,23 @@ local f = ls.function_node
 
 ls.add_snippets('tex', {
   s('pdiff', {
-    t { '\\pdiff{ ', '' },
+    t { '\\pdiff[ ' },
     i(1),
-    t { ' }{', '' },
+    t { ' ]{ ' },
     i(2),
-    t '}',
+    t { ' }{ ' },
+    i(3),
+    t ' }',
     i(0),
   }),
   s('diff', {
-    t { '\\diff{ ', '' },
+    t { '\\diff[ ' },
     i(1),
-    t { ' }{', '' },
+    t { ' ]{ ' },
     i(2),
-    t '}',
+    t { ' }{ ' },
+    i(3),
+    t ' }',
     i(0),
   }),
   s('tdiff', {
@@ -56,6 +60,12 @@ ls.add_snippets('tex', {
     t { '\\begin{align}', '  ' },
     i(1),
     t { '', '\\end{align}' },
+    i(0),
+  }),
+  s('peq', {
+    t { '\\begin{align*}', '  ' },
+    i(1),
+    t { '', '\\end{align*}' },
     i(0),
   }),
   s('ilist', {
@@ -229,6 +239,14 @@ ls.add_snippets('tex', {
     t { '}', '\\end{figure}', '' },
     i(0),
   }),
+  s('pfig', {
+    t { '\\begin{figure}[H]', '  \\centering', '  \\includegraphics[' },
+    i(1),
+    t ']{',
+    i(2),
+    t { '}', '\\end{figure}', '' },
+    i(0),
+  }),
   s('tab', {
     t { '\\begin{table}[H]', '  \\begin{tabu}{' },
     i(1),
@@ -259,8 +277,13 @@ ls.add_snippets('tex', {
   s('frame', {
     t { '\\begin{frame}{' },
     i(1),
-    t { '}', '  ' },
+    t { '}', '' },
+    t { '  \\begin{columns}', '' },
+    t { '    \\column{' },
     i(2),
+    t { '\\textwidth}', '      ' },
+    i(3),
+    t { '', '  \\end{columns}' },
     t { '', '\\end{frame}' },
     i(0),
   }),

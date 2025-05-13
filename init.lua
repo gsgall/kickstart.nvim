@@ -1,3 +1,4 @@
+vim.opt.columns = vim.o.columns
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'tex',
   callback = function()
