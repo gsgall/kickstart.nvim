@@ -1,3 +1,10 @@
+vim.api.nvim_create_autocmd('BufWritePre', {
+  -- uncomment in case the need to specify which files get formatted is needed
+  -- pattern = { "*.cpp", "*.cc", "*.cxx", "*.c++", "*.hpp", "*.h", "*.hxx", "*.h++" },
+  callback = function()
+    vim.lsp.buf.format { async = false }
+  end,
+})
 -- Ignore compiled files
 vim.opt.wildignore:append { '*.o', '*.so', '*.dylib', '*.exe', '*.dll', '*.lo', '*.d' }
 -- Archive files
@@ -409,6 +416,12 @@ require('lazy').setup({
         { path = 'luvit-meta/library', words = { 'vim%.uv' } },
       },
     },
+  },
+  {
+    'p00f/clangd_extensions.nvim',
+    config = function()
+      require('clangd_extensions').setup()
+    end,
   },
   { 'Bilal2453/luvit-meta', lazy = true },
   {
