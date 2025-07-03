@@ -5,9 +5,8 @@ vim.api.nvim_create_autocmd('BufWritePre', {
     vim.lsp.buf.format { async = false }
   end,
 })
--- Ignore compiled files
+-- this ignores files when trying to open something with the :e command
 vim.opt.wildignore:append { '*.o', '*.so', '*.dylib', '*.exe', '*.dll', '*.lo', '*.d' }
--- Archive files
 vim.opt.wildignore:append { '*.zip', '*.tar.gz', '*.tar.bz2', '*.rar', '*.tar.xz' }
 
 vim.api.nvim_create_autocmd('FileType', {
