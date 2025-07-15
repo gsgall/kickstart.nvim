@@ -6,34 +6,10 @@ local f = ls.function_node
 -- Helper function to create a snippet with a trigger and body
 
 ls.add_snippets('cpp', {
-  s('for', {
-    t { 'for(' },
+  s('jdc', {
+    t { '/**', ' * ' },
     i(1),
-    t { ')', '{', '  ' },
-    i(2),
-    t { '', '}', '' },
-    i(0),
-  }),
-  s('if', {
-    t { 'if(' },
-    i(1),
-    t { ')', '{', '  ' },
-    i(2),
-    t { '', '}', '' },
-    i(0),
-  }),
-  s('elif', {
-    t { 'if(' },
-    i(1),
-    t { ')', '{', '  ' },
-    i(2),
-    t { '', '}', '' },
-    t { 'else if(' },
-    i(3),
-    t { ')', '{', '  ' },
-    i(4),
-    t { '', '}', '' },
-    i(0),
+    t { '', ' */' },
   }),
 })
 
