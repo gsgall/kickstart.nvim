@@ -8,8 +8,12 @@ local f = ls.function_node
 ls.add_snippets('cpp', {
   s('jdc', {
     t { '/**', ' * ' },
-    i(1),
+    i(0),
     t { '', ' */' },
+  }),
+  s('mvc', {
+    t { '/// ' },
+    i(0),
   }),
 })
 
