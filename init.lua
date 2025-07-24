@@ -6,8 +6,30 @@ vim.api.nvim_create_autocmd('BufWritePre', {
   end,
 })
 -- this ignores files when trying to open something with the :e command
-vim.opt.wildignore:append { '*.o', '*.so', '*.dylib', '*.exe', '*.dll', '*.lo', '*.d' }
+vim.opt.wildignore:append { '*.o', '*.so', '*.dylib', '*.exe', '*.dll', '*.lo', '*.d', '*.gcda', '*.gcno' }
 vim.opt.wildignore:append { '*.zip', '*.tar.gz', '*.tar.bz2', '*.rar', '*.tar.xz' }
+-- ignoring intermediate latex files
+vim.opt.wildignore:append {
+  '*.aux',
+  '*.bbl',
+  '*.bcf',
+  '*.blg',
+  '*.fdb_latexmk',
+  '*.fls',
+  '*.log',
+  '*.nav',
+  '*.out',
+  '*.run.xml',
+  '*.snm',
+  '*.synctex.gz',
+  '*.toc',
+  '*.xdv',
+  '*.pdf',
+  '*.png',
+  '*.jpg',
+  '*.jpeg',
+  '*.svg',
+}
 
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'tex', 'C', 'h', 'c', 'cpp', 'hpp' },
@@ -355,6 +377,40 @@ require('lazy').setup({
         --   },
         -- },
         -- pickers = {}
+        --
+        defaults = {
+          file_ignore_patterns = {
+            '%.o$',
+            '%.so$',
+            '%.dylib$',
+            '%.exe$',
+            '%.dll$',
+            '%.lo$',
+            '%.d$',
+            '%.gcda$',
+            '%.gcno$',
+            '%.aux$',
+            '%.bbl$',
+            '%.bcf$',
+            '%.blg$',
+            '%.fdb_latexmk$',
+            '%.fls$',
+            '%.log$',
+            '%.nav$',
+            '%.out$',
+            '%.pdf$',
+            '%.run.xml$',
+            '%.snm$',
+            '%.synctex.gz$',
+            '%.toc$',
+            '%.xdv$',
+            '%.png$',
+            '%.jpg$',
+            '%.jpeg$',
+            '%.svg$',
+          },
+        },
+
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),

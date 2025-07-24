@@ -287,6 +287,14 @@ ls.add_snippets('tex', {
     t { '', '\\end{frame}' },
     i(0),
   }),
+  s('blk', {
+    t { '\\begin{block}{' },
+    i(1),
+    t { '}', '  ' },
+    i(2),
+    t { '', '\\end{block}' },
+    i(0),
+  }),
 })
 
 vim.api.nvim_create_autocmd('FileType', {
