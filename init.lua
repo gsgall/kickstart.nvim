@@ -29,6 +29,7 @@ vim.opt.wildignore:append {
   '*.jpg',
   '*.jpeg',
   '*.svg',
+  '*.gif',
 }
 
 vim.api.nvim_create_autocmd('FileType', {
@@ -408,6 +409,7 @@ require('lazy').setup({
             '%.jpg$',
             '%.jpeg$',
             '%.svg$',
+            '%.gif$',
           },
         },
 
