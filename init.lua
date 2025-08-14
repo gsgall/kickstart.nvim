@@ -30,6 +30,7 @@ vim.opt.wildignore:append {
   '*.jpeg',
   '*.svg',
   '*.gif',
+  '*.dSYM',
 }
 
 vim.api.nvim_create_autocmd('FileType', {
@@ -130,7 +131,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 --
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+vim.keymap.set('t', '<leader>qt', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
@@ -157,7 +158,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
-    vim.highlight.on_yank()
+    vim.hl.on_yank()
   end,
 })
 
@@ -410,6 +411,8 @@ require('lazy').setup({
             '%.jpeg$',
             '%.svg$',
             '%.gif$',
+            '%.dSYM/',
+            '%.dSYM/.*',
           },
         },
 
@@ -992,5 +995,62 @@ require('lazy').setup({
 require 'snippets.latex'
 require 'snippets.cpp'
 
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
+-- TODO: Remove this from the init file and make it its own plug in
+vim.api.nvim_set_hl(0, 'TerminalBackgroundColor', { bg = '#000000' })
+
+local state = {
+  floating = {
+    buf = -1,
+    win = -1,
+  },
+}
+
+local function create_floating_window(opts)
+  opts = opts or {}
+  local width = opts.width or math.floor(vim.o.columns)
+  local height = opts.height or math.floor(vim.o.lines)
+
+  -- Calculate the position to center the window
+  local col = math.floor((vim.o.columns - width) / 2)
+  local row = math.floor((vim.o.lines - height) / 2)
+
+  -- Create a buffer
+  local buf = nil
+  if vim.api.nvim_buf_is_valid(opts.buf) then
+    buf = opts.buf
+  else
+    buf = vim.api.nvim_create_buf(false, true) -- No file, scratch buffer
+  end
+
+  -- Define window configuration
+  local win_config = {
+    relative = 'editor',
+    width = width,
+    height = height,
+    col = col,
+    row = row,
+    style = 'minimal', -- No borders or extra UI elements
+  }
+
+  -- Create the floating window
+  local win = vim.api.nvim_open_win(buf, true, win_config)
+  vim.wo[win].winhighlight = 'Normal:TerminalBackgroundColor'
+  return { buf = buf, win = win }
+end
+
+local toggle_terminal = function()
+  if not vim.api.nvim_win_is_valid(state.floating.win) then
+    state.floating = create_floating_window { buf = state.floating.buf }
+    if vim.bo[state.floating.buf].buftype ~= 'terminal' then
+      vim.cmd.terminal()
+    end
+  else
+    vim.api.nvim_win_hide(state.floating.win)
+  end
+end
+
+-- Example usage:
+-- Create a floating window with default dimensions
+vim.api.nvim_create_user_command('Floaterminal', toggle_terminal, {})
+vim.keymap.set('n', '<leader>ot', '<cmd>Floaterminal<cr>', { desc = 'Toggle floating terminal' })
+vim.keymap.set('t', '<leader>ot', '<cmd>Floaterminal<cr>', { desc = 'Toggle floating terminal' })
