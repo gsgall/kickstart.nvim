@@ -1,5 +1,4 @@
-vim.api.nvim_create_autocmd('BufWritePre', {
-  -- uncomment in case the need to specify which files get formatted is needed
+vim.api.nvim_create_autocmd('BufWritePre', { -- uncomment in case the need to specify which files get formatted is needed
   -- pattern = { "*.cpp", "*.cc", "*.cxx", "*.c++", "*.hpp", "*.h", "*.hxx", "*.h++" },
   callback = function()
     vim.lsp.buf.format { async = false }
@@ -1004,6 +1003,31 @@ local state = {
     win = -1,
   },
 }
+local function sync_terminal_cwd()
+  local job_id = vim.bo[state.floating.buf].channel
+  if job_id and job_id > 0 then
+    -- Create a temporary file to store the directory
+    local temp_file = vim.fn.tempname()
+
+    -- Send command to write current directory to temp file
+    vim.fn.chansend(job_id, string.format('pwd > %s\n', temp_file))
+
+    -- Wait a bit and then read the directory
+    vim.defer_fn(function()
+      local file = io.open(temp_file, 'r')
+      if file then
+        local term_cwd = file:read '*line'
+        file:close()
+        os.remove(temp_file)
+
+        if term_cwd and term_cwd ~= vim.fn.getcwd() then
+          vim.cmd('cd ' .. vim.fn.fnameescape(term_cwd))
+          print('Synced to: ' .. term_cwd)
+        end
+      end
+    end, 100) -- Wait 100ms for command to complete
+  end
+end
 
 local function create_floating_window(opts)
   opts = opts or {}
@@ -1045,6 +1069,7 @@ local toggle_terminal = function()
       vim.cmd.terminal()
     end
   else
+    sync_terminal_cwd()
     vim.api.nvim_win_hide(state.floating.win)
   end
 end
