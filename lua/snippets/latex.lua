@@ -6,6 +6,9 @@ local f = ls.function_node
 -- Helper function to create a snippet with a trigger and body
 
 ls.add_snippets('tex', {
+  s('inf', { t { '\\infty' }, i(0) }),
+  s('4p', { t { '4 \\pi' }, i(0) }),
+  s('2p', { t { '2 \\pi' }, i(0) }),
   s('pdiff', {
     t { '\\pdiff[ ' },
     i(1),
@@ -27,13 +30,13 @@ ls.add_snippets('tex', {
     i(0),
   }),
   s('tdiff', {
-    t { '\\diff{ ', '' },
+    t { '\\diff{ ' },
     i(1),
     t ' }{t} ',
     i(0),
   }),
   s('tpdiff', {
-    t { '\\pdiff{ ', '' },
+    t { '\\pdiff{ ' },
     i(1),
     t ' }{t} ',
     i(0),
@@ -323,6 +326,176 @@ ls.add_snippets('tex', {
     t { '}', '  ' },
     i(2),
     t { '', '\\end{block}' },
+    i(0),
+  }),
+  s('ofr', {
+    t { '\\left( \\vec{r} \\,\\right)' },
+    i(0),
+  }),
+  s('ofp', {
+    t { '\\left( \\vec{p} \\,\\right)' },
+    i(0),
+  }),
+  s('ofv', {
+    t { '\\left( \\vec{v} \\,\\right)' },
+    i(0),
+  }),
+  s('ofe', {
+    t { '\\left( E \\right)' },
+    i(0),
+  }),
+  s('ofg', {
+    t { '\\left( \\Gamma \\right)' },
+    i(0),
+  }),
+  s('oft', {
+    t { '\\left( t \\right)' },
+    i(0),
+  }),
+  s('ofrt', {
+    t { '\\left( \\vec{r}, t\\right)' },
+    i(0),
+  }),
+  s('ofpt', {
+    t { '\\left( \\vec{p}, t\\right)' },
+    i(0),
+  }),
+  s('ofgt', {
+    t { '\\left( \\Gamma, t\\right)' },
+    i(0),
+  }),
+  s('ofvt', {
+    t { '\\left( \\vec{v}, t\\right)' },
+    i(0),
+  }),
+  s('ofet', {
+    t { '\\left( E, t\\right)' },
+    i(0),
+  }),
+  s('ofrvt', {
+    t { '\\left( \\vec{r}, \\vec{v}, t\\right)' },
+    i(0),
+  }),
+  s('ofrpt', {
+    t { '\\left( \\vec{r}, \\vec{p}, t\\right)' },
+    i(0),
+  }),
+  s('ofret', {
+    t { '\\left( \\vec{r}, E, t\\right)' },
+    i(0),
+  }),
+  s('ofrgt', {
+    t { '\\left( \\vec{r}, \\Gamma, t\\right)' },
+    i(0),
+  }),
+  s('pos', {
+    t { '\\vec{r}' },
+    i(0),
+  }),
+  s('vel', {
+    t { '\\vec{v}' },
+    i(0),
+  }),
+  s('pvec', {
+    t { '\\vec{p}' },
+    i(0),
+  }),
+  s('ppvec', {
+    t { "\\vec{p}\\,'" },
+    i(0),
+  }),
+  s('vec', {
+    t { '\\vec{' },
+    i(1),
+    t { '}' },
+    i(0),
+  }),
+  s('dr', {
+    t { 'd^3 r' },
+    i(0),
+  }),
+  s('dp', {
+    t { 'd^3 p' },
+    i(0),
+  }),
+  s('dg', {
+    t { 'd \\Gamma' },
+    i(0),
+  }),
+  s('grad', {
+    t { '\\vec{\\nabla}' },
+    i(0),
+  }),
+  s('vgrad', {
+    t { '\\cdot \\vec{\\nabla}_{\\vec{v}}' },
+    i(0),
+  }),
+  s('rgrad', {
+    t { '\\cdot \\vec{\\nabla}_{\\vec{r}}' },
+    i(0),
+  }),
+  s('pgrad', {
+    t { '\\cdot \\vec{\\nabla}_{\\vec{p}}' },
+    i(0),
+  }),
+  s('gam', {
+    t { '\\Gamma' },
+    i(0),
+  }),
+  s('gpup', {
+    t { "\\Gamma', \\Gamma_1' \\to \\Gamma, \\Gamma_1" },
+    i(0),
+  }),
+  s('ofgpup', {
+    t { "\\left( \\Gamma', \\Gamma_1' \\to \\Gamma, \\Gamma_1 \\right)" },
+    i(0),
+  }),
+  s('ofrgpupt', {
+    t { "\\left( \\vec{r}, \\Gamma', \\Gamma_1' \\to \\Gamma, \\Gamma_1, t \\right)" },
+    i(0),
+  }),
+  s('gupp', {
+    t { "\\Gamma, \\Gamma_1 \\to \\Gamma', \\Gamma_1'" },
+    i(0),
+  }),
+  s('ofgupp', {
+    t { "\\left( \\Gamma, \\Gamma_1 \\to \\Gamma', \\Gamma_1' \\right)" },
+    i(0),
+  }),
+  s('ofrguppt', {
+    t { "\\left(\\vec{r}, \\Gamma, \\Gamma_1 \\to \\Gamma', \\Gamma_1', t \\right)" },
+    i(0),
+  }),
+  s('ppup', {
+    t { "\\vec{p}\\,' \\to \\vec{p}" },
+    i(0),
+  }),
+  s('ofppup', {
+    t { "\\left( \\vec{p}\\,' \\to \\vec{p} \\right)" },
+    i(0),
+  }),
+  s('pupp', {
+    t { "\\vec{p} \\to \\vec{p}\\,'" },
+    i(0),
+  }),
+  s('ofpupp', {
+    t { "\\left( \\vec{p} \\to \\vec{p}\\,' \\right)" },
+    i(0),
+  }),
+  s('pen', {
+    t { '\\frac{ p^2 }{ 2m }' },
+    i(0),
+  }),
+  s('icol', {
+    t { 'I_\\text{coll}' },
+    i(0),
+  }),
+  s('dom', {
+    t { 'd \\Omega' },
+    i(0),
+  }),
+  s('om', {
+    t { '\\vec{\\Omega}' },
     i(0),
   }),
 })

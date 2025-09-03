@@ -1,3 +1,13 @@
+vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
+  pattern = { '*' },
+  callback = function()
+    local save_cursor = vim.fn.getpos '.'
+    pcall(function()
+      vim.cmd [[%s/\s\+$//e]]
+    end)
+    vim.fn.setpos('.', save_cursor)
+  end,
+})
 vim.api.nvim_create_autocmd('BufWritePre', { -- uncomment in case the need to specify which files get formatted is needed
   -- pattern = { "*.cpp", "*.cc", "*.cxx", "*.c++", "*.hpp", "*.h", "*.hxx", "*.h++" },
   callback = function()
@@ -992,7 +1002,6 @@ require('lazy').setup({
 })
 
 require 'snippets.latex'
-require 'snippets.cpp'
 
 -- TODO: Remove this from the init file and make it its own plug in
 vim.api.nvim_set_hl(0, 'TerminalBackgroundColor', { bg = '#000000' })
