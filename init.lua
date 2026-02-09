@@ -391,6 +391,7 @@ require('lazy').setup({
         --
         defaults = {
           file_ignore_patterns = {
+            'moose.*',
             '%.o$',
             '%.so$',
             '%.dylib$',
@@ -647,6 +648,9 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
+        zls = {
+          enable_build_on_save = true,
+        },
         clangd = {},
         checkmake = {},
         -- gopls = {},
@@ -1002,6 +1006,7 @@ require('lazy').setup({
 })
 
 require 'snippets.latex'
+require 'snippets.cpp'
 
 -- TODO: Remove this from the init file and make it its own plug in
 vim.api.nvim_set_hl(0, 'TerminalBackgroundColor', { bg = '#000000' })
@@ -1041,11 +1046,11 @@ end
 local function create_floating_window(opts)
   opts = opts or {}
   local width = opts.width or math.floor(vim.o.columns)
-  local height = opts.height or math.floor(vim.o.lines)
+  local height = opts.height or math.floor(0.975 * vim.o.lines)
 
   -- Calculate the position to center the window
   local col = math.floor((vim.o.columns - width) / 2)
-  local row = math.floor((vim.o.lines - height) / 2)
+  local row = math.floor((vim.o.lines - height) / 2 - 0.025 * vim.o.lines)
 
   -- Create a buffer
   local buf = nil
@@ -1088,3 +1093,4 @@ end
 vim.api.nvim_create_user_command('Floaterminal', toggle_terminal, {})
 vim.keymap.set('n', '<leader>ot', '<cmd>Floaterminal<cr>', { desc = 'Toggle floating terminal' })
 vim.keymap.set('t', '<leader>ot', '<cmd>Floaterminal<cr>', { desc = 'Toggle floating terminal' })
+vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Terminal normal mode' })

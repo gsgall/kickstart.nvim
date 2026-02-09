@@ -3,6 +3,7 @@ local s = ls.snippet
 local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
+local events = require 'luasnip.util.events'
 -- Helper function to create a snippet with a trigger and body
 
 ls.add_snippets('tex', {
@@ -332,6 +333,10 @@ ls.add_snippets('tex', {
     t { '\\left( \\vec{r} \\,\\right)' },
     i(0),
   }),
+  s('ofom', {
+    t { '\\left( \\vec{\\Omega} \\,\\right)' },
+    i(0),
+  }),
   s('ofp', {
     t { '\\left( \\vec{p} \\,\\right)' },
     i(0),
@@ -350,6 +355,14 @@ ls.add_snippets('tex', {
   }),
   s('oft', {
     t { '\\left( t \\right)' },
+    i(0),
+  }),
+  s('ofnu', {
+    t { '\\left( \\nu \\right)' },
+    i(0),
+  }),
+  s('ofe', {
+    t { '\\left( E \\right)' },
     i(0),
   }),
   s('ofrt', {
@@ -372,6 +385,14 @@ ls.add_snippets('tex', {
     t { '\\left( E, t\\right)' },
     i(0),
   }),
+  s('ofnut', {
+    t { '\\left( \\nu, t\\right)' },
+    i(0),
+  }),
+  s('ofomt', {
+    t { '\\left( \\vec{\\Omega}, t\\right)' },
+    i(0),
+  }),
   s('ofrvt', {
     t { '\\left( \\vec{r}, \\vec{v}, t\\right)' },
     i(0),
@@ -386,6 +407,14 @@ ls.add_snippets('tex', {
   }),
   s('ofrgt', {
     t { '\\left( \\vec{r}, \\Gamma, t\\right)' },
+    i(0),
+  }),
+  s('ofromt', {
+    t { '\\left( \\vec{r}, \\vec{\\Omega}, t\\right)' },
+    i(0),
+  }),
+  s('ofrnut', {
+    t { '\\left( \\vec{r}, \\nu, t\\right)' },
     i(0),
   }),
   s('pos', {
@@ -420,6 +449,14 @@ ls.add_snippets('tex', {
   }),
   s('dg', {
     t { 'd \\Gamma' },
+    i(0),
+  }),
+  s('dnu', {
+    t { 'd \\nu' },
+    i(0),
+  }),
+  s('dom', {
+    t { 'd \\Omega' },
     i(0),
   }),
   s('grad', {
@@ -490,13 +527,46 @@ ls.add_snippets('tex', {
     t { 'I_\\text{coll}' },
     i(0),
   }),
-  s('dom', {
-    t { 'd \\Omega' },
+  s('inu', {
+    t { 'I_{\\nu}' },
+    i(0),
+  }),
+  s('enu', {
+    t { 'E_{\\nu}' },
+    i(0),
+  }),
+  s('knu', {
+    t { '\\vkappa_{\\nu}' },
     i(0),
   }),
   s('om', {
     t { '\\vec{\\Omega}' },
     i(0),
+  }),
+  s('ofvec', {
+    t { '\\left( \\vec{ ' },
+    i(1),
+    t { ' } \\,\\right)' },
+    i(0),
+  }),
+  s('psup', {
+    t { '^{( ' },
+    i(1),
+    t { ' )}' },
+    i(0),
+  }, {
+    -- this function moves the start of the expansion to one character before the first character where the snippet was started
+    callbacks = {
+      [-1] = {
+        [events.pre_expand] = function(snippet, event_args)
+          local pos = vim.api.nvim_win_get_cursor(0)
+          local row, col = pos[1], pos[2]
+          local new_col = math.max(0, col - 1)
+          vim.api.nvim_buf_set_text(0, row - 1, new_col, row - 1, col, {})
+          vim.api.nvim_win_set_cursor(0, { row, new_col })
+        end,
+      },
+    },
   }),
 })
 
