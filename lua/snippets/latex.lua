@@ -4,12 +4,24 @@ local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
 local events = require 'luasnip.util.events'
+
 -- Helper function to create a snippet with a trigger and body
+local function move_cursor(snippet, event_args)
+  local pos = vim.api.nvim_win_get_cursor(0)
+  local row, col = pos[1], pos[2]
+  local new_col = math.max(0, col - 1)
+  vim.api.nvim_buf_set_text(0, row - 1, new_col, row - 1, col, {})
+  vim.api.nvim_win_set_cursor(0, { row, new_col })
+  return
+end
 
 ls.add_snippets('tex', {
   s('inf', { t { '\\infty' }, i(0) }),
   s('4p', { t { '4 \\pi' }, i(0) }),
   s('2p', { t { '2 \\pi' }, i(0) }),
+  s('1h', { t { '\\frac{1}{2}' }, i(0) }),
+  s('dx', { t { '\\Delta x' }, i(0) }),
+  s('dt', { t { '\\Delta t' }, i(0) }),
   s('pdiff', {
     t { '\\pdiff[ ' },
     i(1),
@@ -70,6 +82,12 @@ ls.add_snippets('tex', {
     t { '\\begin{align*}', '  ' },
     i(1),
     t { '', '\\end{align*}' },
+    i(0),
+  }),
+  s('eqcase', {
+    t { '\\begin{cases}', '  ' },
+    i(1),
+    t { '', '\\end{cases}' },
     i(0),
   }),
   s('ilist', {
@@ -549,22 +567,117 @@ ls.add_snippets('tex', {
     t { ' } \\,\\right)' },
     i(0),
   }),
+  s('ofxt', {
+    t { '\\left( x, ' },
+    i(1),
+    t { 't' },
+    i(2),
+    t { ' \\right)' },
+    i(0),
+  }),
+  s('ofxjtn', {
+    t { '\\left( x_{j' },
+    i(1),
+    t { '}, t^{n' },
+    i(2),
+    t { '} \\right)' },
+    i(0),
+  }),
+  s('atjn', {
+    t { '_{j' },
+    i(1),
+    t { '}^{n' },
+    i(2),
+    t { ' }' },
+    i(0),
+  }, {
+    callbacks = {
+      [-1] = {
+        [events.pre_expand] = move_cursor,
+      },
+    },
+  }),
+  s('atj', {
+    t { '_{j' },
+    i(1),
+    t { '}' },
+    i(0),
+  }, {
+    callbacks = {
+      [-1] = {
+        [events.pre_expand] = move_cursor,
+      },
+    },
+  }),
+  s('atn', {
+    t { '^{n' },
+    i(1),
+    t { '}' },
+    i(0),
+  }, {
+    callbacks = {
+      [-1] = {
+        [events.pre_expand] = move_cursor,
+      },
+    },
+  }),
+  s('ujn', {
+    t { 'u_{j' },
+    i(1),
+    t { '}^{n' },
+    i(2),
+    t { ' }' },
+    i(0),
+  }),
+  s('ub', {
+    t { '\\overline{u}' },
+    i(0),
+  }),
+  s('ubjn', {
+    t { '\\overline{u}_{j' },
+    i(1),
+    t { '}^{n' },
+    i(2),
+    t { ' }' },
+    i(0),
+  }),
+  s('ubj', {
+    t { '\\overline{u}_{j' },
+    i(1),
+    t { '}' },
+    i(0),
+  }),
+  s('ubn', {
+    t { '\\overline{u}^{n' },
+    i(1),
+    t { '}' },
+    i(0),
+  }),
+  s('cl', {
+    t { 'u_t + f_x(x) = 0' },
+    i(0),
+  }),
+  s('trans', {
+    t { 'u_t + a(x) u_x = 0' },
+    i(0),
+  }),
+  s('ltrans', {
+    t { 'u_t + a u_x = 0' },
+    i(0),
+  }),
+  s('burg', {
+    t { 'u_t + \\frac{1}{2} \\left( u \\right)^2_x = 0' },
+    i(0),
+  }),
   s('psup', {
     t { '^{( ' },
     i(1),
     t { ' )}' },
     i(0),
   }, {
-    -- this function moves the start of the expansion to one character before the first character where the snippet was started
     callbacks = {
       [-1] = {
-        [events.pre_expand] = function(snippet, event_args)
-          local pos = vim.api.nvim_win_get_cursor(0)
-          local row, col = pos[1], pos[2]
-          local new_col = math.max(0, col - 1)
-          vim.api.nvim_buf_set_text(0, row - 1, new_col, row - 1, col, {})
-          vim.api.nvim_win_set_cursor(0, { row, new_col })
-        end,
+        [events.pre_expand] = move_cursor,
       },
     },
   }),
