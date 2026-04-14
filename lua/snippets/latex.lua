@@ -6,22 +6,31 @@ local f = ls.function_node
 local events = require 'luasnip.util.events'
 
 -- Helper function to create a snippet with a trigger and body
-local function move_cursor(snippet, event_args)
+---@diagnostic disable-next-line: unused-local
+local function move_cursor(event_args, snippet)
   local pos = vim.api.nvim_win_get_cursor(0)
   local row, col = pos[1], pos[2]
   local new_col = math.max(0, col - 1)
   vim.api.nvim_buf_set_text(0, row - 1, new_col, row - 1, col, {})
   vim.api.nvim_win_set_cursor(0, { row, new_col })
-  return
 end
 
 ls.add_snippets('tex', {
+  s('ith', { t { '$i^\\text{th}$' } }),
+  s('nth', { t { '$n^\\text{th}$' } }),
   s('inf', { t { '\\infty' }, i(0) }),
-  s('4p', { t { '4 \\pi' }, i(0) }),
-  s('2p', { t { '2 \\pi' }, i(0) }),
-  s('1h', { t { '\\frac{1}{2}' }, i(0) }),
+  s('fp', { t { '4 \\pi' }, i(0) }),
+  s('tp', { t { '2 \\pi' }, i(0) }),
+  s('oh', { t { '\\frac{1}{2}' }, i(0) }),
   s('dx', { t { '\\Delta x' }, i(0) }),
   s('dt', { t { '\\Delta t' }, i(0) }),
+  s('dint', { t { '\\int_{' }, i(1), t { '}^{' }, i(2), t { '} ' }, i(0) }),
+  s('tn', { t { 't^{n' }, i(1), t { '}' }, i(0) }),
+  s('xj', { t { 'x_{j' }, i(1), t { '}' }, i(0) }),
+  s('int', { t { '\\int' }, i(0) }),
+  s('var', { t { '\\text{Var}\\left( ' }, i(1), t { ' \\right) ' }, i(0) }),
+  s('bar', { t { '\\overline{ ' }, i(1), t { ' }' }, i(0) }),
+  s('tild', { t { '\\tilde{ ' }, i(1), t { ' }' }, i(0) }),
   s('pdiff', {
     t { '\\pdiff[ ' },
     i(1),
@@ -43,15 +52,23 @@ ls.add_snippets('tex', {
     i(0),
   }),
   s('tdiff', {
-    t { '\\diff{ ' },
+    t { '\\diff[ ' },
     i(1),
-    t ' }{t} ',
+    t { ' ]{ ' },
+    i(2),
+    t { ' }{ t' },
+    i(3),
+    t ' }',
     i(0),
   }),
   s('tpdiff', {
-    t { '\\pdiff{ ' },
+    t { '\\pdiff[ ' },
     i(1),
-    t ' }{t} ',
+    t { ' ]{ ' },
+    i(2),
+    t { '}{ t' },
+    i(3),
+    t '}',
     i(0),
   }),
   s('sec', {
@@ -141,6 +158,12 @@ ls.add_snippets('tex', {
       return args[1][1]
     end, { 1 }),
     t '}',
+    i(0),
+  }),
+  s('of', {
+    t '\\left( ',
+    i(1),
+    t ' \\right)',
     i(0),
   }),
   s('lrp', {
@@ -568,11 +591,17 @@ ls.add_snippets('tex', {
     i(0),
   }),
   s('ofxt', {
-    t { '\\left( x, ' },
+    t { '\\left( x ' },
     i(1),
-    t { 't' },
+    t { ', t ' },
     i(2),
-    t { ' \\right)' },
+    t { '\\right)' },
+    i(0),
+  }),
+  s('ofx', {
+    t { '\\left( x ' },
+    i(1),
+    t { '\\right)' },
     i(0),
   }),
   s('ofxjtn', {
@@ -588,7 +617,7 @@ ls.add_snippets('tex', {
     i(1),
     t { '}^{n' },
     i(2),
-    t { ' }' },
+    t { '}' },
     i(0),
   }, {
     callbacks = {
@@ -621,12 +650,24 @@ ls.add_snippets('tex', {
       },
     },
   }),
+  s('un', {
+    t { 'u^{n' },
+    i(1),
+    t { '}' },
+    i(0),
+  }),
+  s('uj', {
+    t { 'u_{j' },
+    i(1),
+    t { '}' },
+    i(0),
+  }),
   s('ujn', {
     t { 'u_{j' },
     i(1),
     t { '}^{n' },
     i(2),
-    t { ' }' },
+    t { '}' },
     i(0),
   }),
   s('ub', {
@@ -638,7 +679,7 @@ ls.add_snippets('tex', {
     i(1),
     t { '}^{n' },
     i(2),
-    t { ' }' },
+    t { '}' },
     i(0),
   }),
   s('ubj', {
@@ -684,8 +725,12 @@ ls.add_snippets('tex', {
 })
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'tex',
-  callback = function()
-    ls.filetype_extend('tex', { 'latex' })
+  pattern = { 'tex', 'markdown' },
+  callback = function(ev)
+    if ev.match == 'tex' then
+      ls.filetype_extend('tex', { 'latex' })
+    elseif ev.match == 'markdown' then
+      ls.filetype_extend('markdown', { 'markdown' })
+    end
   end,
 })

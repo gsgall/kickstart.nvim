@@ -8,8 +8,9 @@ vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
     vim.fn.setpos('.', save_cursor)
   end,
 })
+vim.lsp.set_log_level 'ERROR'
 vim.api.nvim_create_autocmd('BufWritePre', { -- uncomment in case the need to specify which files get formatted is needed
-  -- pattern = { "*.cpp", "*.cc", "*.cxx", "*.c++", "*.hpp", "*.h", "*.hxx", "*.h++" },
+  --  pattern = { '*.cpp', '*.cc', '*.cxx', '*.c++', '*.hpp', '*.h', '*.hxx', '*.h++' },
   callback = function()
     vim.lsp.buf.format { async = false }
   end,
@@ -43,7 +44,7 @@ vim.opt.wildignore:append {
 }
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'tex', 'C', 'h', 'c', 'cpp', 'hpp' },
+  pattern = { 'i', 'tex', 'C', 'h', 'c', 'cpp', 'hpp' },
   callback = function()
     vim.opt_local.shiftwidth = 2 -- Number of spaces for indentation
     vim.opt_local.tabstop = 2 -- Number of spaces a <Tab> counts for
@@ -56,7 +57,18 @@ vim.api.nvim_create_autocmd('FileType', {
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
-
+-- copy the current file name to the system clipboard
+vim.keymap.set('n', '<leader>yf', function()
+  vim.fn.setreg('+', vim.fn.expand '%:t')
+end, { desc = 'Yank filename to clipboard', nowait = true })
+-- copy the current file name with the relative path from where neovim is open to the system clipboard
+vim.keymap.set('n', '<leader>yr', function()
+  vim.fn.setreg('+', vim.fn.expand '%:~:.')
+end, { desc = 'Yank relative path to clipboard', nowait = true })
+-- copy the current file name with the absolute path from where neovim is open to the system clipboard
+vim.keymap.set('n', '<leader>yp', function()
+  vim.fn.setreg('+', vim.fn.expand '%:p')
+end, { desc = 'Yank full path to clipboard', nowait = true })
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
 
@@ -648,10 +660,10 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         zls = {
-          enable_build_on_save = true,
+          --   enable_build_on_save = false,
         },
         clangd = {},
-        checkmake = {},
+        -- checkmake = {},
         -- gopls = {},
         pyright = {},
         -- rust_analyzer = {},
@@ -667,18 +679,36 @@ require('lazy').setup({
         -- tsserver = {},
         --
 
+        stylua = {}, -- Used to format Lua code
+
+        -- Special Lua Config, as recommended by neovim help docs
         lua_ls = {
-          -- cmd = {...},
-          -- filetypes = { ...},
-          -- capabilities = {},
-          settings = {
-            Lua = {
-              completion = {
-                callSnippet = 'Replace',
+          on_init = function(client)
+            if client.workspace_folders then
+              local path = client.workspace_folders[1].name
+              if path ~= vim.fn.stdpath 'config' and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then
+                return
+              end
+            end
+
+            client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+              runtime = {
+                version = 'LuaJIT',
+                path = { 'lua/?.lua', 'lua/?/init.lua' },
               },
-              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
-            },
+              workspace = {
+                checkThirdParty = false,
+                -- NOTE: this is a lot slower and will cause issues when working on your own configuration.
+                --  See https://github.com/neovim/nvim-lspconfig/issues/3189
+                library = vim.tbl_extend('force', vim.api.nvim_get_runtime_file('', true), {
+                  '${3rd}/luv/library',
+                  '${3rd}/busted/library',
+                }),
+              },
+            })
+          end,
+          settings = {
+            Lua = {},
           },
         },
       }
@@ -700,7 +730,7 @@ require('lazy').setup({
         'isort',
         'clangd',
         'clang-format',
-        'checkmake',
+        -- 'checkmake',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -727,12 +757,14 @@ require('lazy').setup({
       {
         '<leader>f',
         function()
-          require('conform').format { async = true, lsp_fallback = true }
+          require('conform').format { async = true, lsp_format = 'fallback' }
         end,
         mode = '',
         desc = '[F]ormat buffer',
       },
     },
+    ---@module 'conform'
+    ---@type conform.setupOpts
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
@@ -740,15 +772,19 @@ require('lazy').setup({
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
         local disable_filetypes = { c = true, cpp = true }
-        return {
-          timeout_ms = 500,
-          lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
-        }
+        if disable_filetypes[vim.bo[bufnr].filetype] then
+          return nil
+        else
+          return {
+            timeout_ms = 500,
+            lsp_format = 'fallback',
+          }
+        end
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        python = { 'isort', 'black' },
+        -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
