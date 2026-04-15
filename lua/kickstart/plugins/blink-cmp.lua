@@ -49,6 +49,9 @@ return {
         -- No, but seriously. Please read `:help ins-completion`, it is really good!
         --
         -- All presets have the following mappings:
+        -- Snippet jumping (Equivalent to your <C-l> and <C-h>)
+        ['<C-l>'] = { 'snippet_forward', 'fallback' },
+        ['<C-h>'] = { 'snippet_backward', 'fallback' },
         -- <tab>/<s-tab>: move to right/left of your snippet expansion
         -- <c-space>: Open menu or open docs if already open
         -- <c-n>/<c-p> or <up>/<down>: Select next/previous item

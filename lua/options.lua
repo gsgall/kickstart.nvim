@@ -7,7 +7,7 @@
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -69,4 +69,35 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- this ignores files when trying to open something with the :e command
+vim.opt.wildignore:append { '*.o', '*.so', '*.dylib', '*.exe', '*.dll', '*.lo', '*.d', '*.gcda', '*.gcno' }
+vim.opt.wildignore:append { '*.zip', '*.tar.gz', '*.tar.bz2', '*.rar', '*.tar.xz' }
+-- ignoring intermediate latex files
+vim.opt.wildignore:append {
+  '*.aux',
+  '*.bbl',
+  '*.bcf',
+  '*.blg',
+  '*.fdb_latexmk',
+  '*.fls',
+  '*.log',
+  '*.nav',
+  '*.out',
+  '*.run.xml',
+  '*.snm',
+  '*.synctex.gz',
+  '*.toc',
+  '*.xdv',
+  '*.pdf',
+  '*.png',
+  '*.jpg',
+  '*.jpeg',
+  '*.svg',
+  '*.gif',
+  '*.dSYM',
+}
+-- default 4 space indentation for all files and ensuring to tab expand
+vim.opt.shiftwidth = 4
+vim.opt.tabstop = 4
+vim.opt.expandtab = true
 -- vim: ts=2 sts=2 sw=2 et

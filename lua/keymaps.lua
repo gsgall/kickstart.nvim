@@ -29,13 +29,13 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 --
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+vim.keymap.set('t', '<leader>qt', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
+vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
+vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
+vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -64,4 +64,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function() vim.hl.on_yank() end,
 })
 
+-- copy the current file name to the system clipboard
+vim.keymap.set('n', '<leader>yf', function() vim.fn.setreg('+', vim.fn.expand '%:t') end, { desc = 'Yank filename to clipboard', nowait = true })
+-- copy the current file name with the relative path from where neovim is open to the system clipboard
+vim.keymap.set('n', '<leader>yr', function() vim.fn.setreg('+', vim.fn.expand '%:~:.') end, { desc = 'Yank relative path to clipboard', nowait = true })
+-- copy the current file name with the absolute path from where neovim is open to the system clipboard
+vim.keymap.set('n', '<leader>yp', function() vim.fn.setreg('+', vim.fn.expand '%:p') end, { desc = 'Yank full path to clipboard', nowait = true })
 -- vim: ts=2 sts=2 sw=2 et
