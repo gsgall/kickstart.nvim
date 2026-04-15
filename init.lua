@@ -111,5 +111,7 @@ require 'custom-commands'
 -- [[ Adding some custom things for latex ]]
 require 'latex-snippets'
 
+-- [[ Adding the ability to open a floating terminal ]]
+require 'floatterminal'
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
