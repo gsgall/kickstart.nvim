@@ -40,10 +40,10 @@ end
 local function create_floating_window(opts)
   opts = opts or {}
   local width = opts.width or math.floor(vim.o.columns)
-  local height = opts.height or math.floor(0.975 * vim.o.lines)
+  local height = opts.height or math.floor(vim.o.lines)
 
   local col = math.floor((vim.o.columns - width) / 2)
-  local row = math.floor((vim.o.lines - height) / 2 - 0.025 * vim.o.lines)
+  local row = math.floor((vim.o.lines - height) / 2)
 
   local buf = (opts.buf and vim.api.nvim_buf_is_valid(opts.buf)) and opts.buf or vim.api.nvim_create_buf(false, true)
 

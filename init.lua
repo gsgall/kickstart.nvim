@@ -108,8 +108,9 @@ require 'lazy-plugins'
 -- [[ Add some custom auto commands ]]
 require 'custom-commands'
 
--- [[ Adding some custom things for latex ]]
+-- [[ Adding some custom snippets ]]
 require 'latex-snippets'
+require 'cpp-snippets'
 
 -- [[ Adding the ability to open a floating terminal ]]
 require 'floatterminal'
