@@ -52,6 +52,10 @@ return {
         -- Snippet jumping (Equivalent to your <C-l> and <C-h>)
         ['<C-l>'] = { 'snippet_forward', 'fallback' },
         ['<C-h>'] = { 'snippet_backward', 'fallback' },
+        -- removing tab for auto complete moving through functions
+        -- this is very annoying
+        ['<Tab>'] = {},
+        ['<S-Tab>'] = {},
         -- <tab>/<s-tab>: move to right/left of your snippet expansion
         -- <c-space>: Open menu or open docs if already open
         -- <c-n>/<c-p> or <up>/<down>: Select next/previous item

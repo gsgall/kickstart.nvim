@@ -69,7 +69,7 @@ local toggle_terminal = function()
       vim.cmd.terminal()
     end
     -- Automatically enter insert mode when opening
-    vim.cmd 'startinsert'
+    --vim.cmd 'startinsert'
   else
     -- Sync directory BEFORE hiding the window
     sync_terminal_cwd()
