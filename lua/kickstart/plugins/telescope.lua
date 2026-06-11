@@ -77,7 +77,7 @@ return {
         -- my custom additions
         defaults = {
           file_ignore_patterns = {
-            'moose.*',
+            --'moose.*',
             '%.o$',
             '%.so$',
             '%.dylib$',
@@ -96,7 +96,7 @@ return {
             '%.log$',
             '%.nav$',
             '%.out$',
-            '%.pdf$',
+            -- '%.pdf$',
             '%.run.xml$',
             '%.snm$',
             '%.synctex.gz$',
