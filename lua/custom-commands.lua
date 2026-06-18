@@ -56,7 +56,7 @@ local function duplicate_content(direction)
     -- No window to the right, create one
     if direction == 'h' or direction == 'l' then
       vim.cmd 'vsplit'
-    elseif direction == '' or direction == 'k' then
+    elseif direction == 'j' or direction == 'k' then
       vim.cmd 'split'
     end
     vim.cmd('wincmd ' .. direction)
@@ -105,7 +105,7 @@ vim.keymap.set('n', '<leader>wl', '<C-w>L', { desc = 'Move window to the right' 
 vim.keymap.set('n', '<leader>wj', '<C-w>J', { desc = 'Move window to the lower' })
 vim.keymap.set('n', '<leader>wk', '<C-w>K', { desc = 'Move window to the upper' })
 
-vim.keymap.set('n', '<leader>mf', function()
+vim.keymap.set('n', '<leader>cmf', function()
   local function feedm(keys) vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, false, true), 'm', false) end
   local function feed(keys) vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, false, true), 'n', false) end
   feed 'df '
@@ -122,4 +122,20 @@ vim.keymap.set('n', '<leader>mf', function()
   feed 'a { return  }<Esc>'
   feedm 'Fnl:w<Enter>'
   feed 'a '
-end, { desc = 'My motion sequence' })
+end, { desc = 'Modify a virutal const member function definition into implementation outline' })
+
+vim.keymap.set('n', '<leader>mf', function()
+  local function feedm(keys) vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, false, true), 'm', false) end
+  local function feed(keys) vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, false, true), 'n', false) end
+  feed 'f('
+  feed 'F l'
+  feedm '<leader>yf'
+  feed 'P'
+  feed 'h'
+  feed '2x'
+  feed 'i::<Esc>'
+  feed 'f;x'
+  feed 'a { return  }<Esc>'
+  feedm 'Fnl:w<Enter>'
+  feed 'a '
+end, { desc = 'Modify a non virtual const member function definition into a implementation outline' })
