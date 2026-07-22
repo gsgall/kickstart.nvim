@@ -105,7 +105,7 @@ vim.keymap.set('n', '<leader>wl', '<C-w>L', { desc = 'Move window to the right' 
 vim.keymap.set('n', '<leader>wj', '<C-w>J', { desc = 'Move window to the lower' })
 vim.keymap.set('n', '<leader>wk', '<C-w>K', { desc = 'Move window to the upper' })
 
-vim.keymap.set('n', '<leader>cmf', function()
+vim.keymap.set('n', '<leader>vmf', function()
   local function feedm(keys) vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, false, true), 'm', false) end
   local function feed(keys) vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, false, true), 'n', false) end
   feed 'df '
@@ -133,9 +133,9 @@ vim.keymap.set('n', '<leader>mf', function()
   feed 'P'
   feed 'h'
   feed '2x'
-  feed 'i::<Esc>'
+  feed 'i::<esc>'
   feed 'f;x'
-  feed 'a { return  }<Esc>'
-  feedm 'Fnl:w<Enter>'
+  feed 'a { return  }<esc>'
+  feedm 'fnl:w<enter>'
   feed 'a '
-end, { desc = 'Modify a non virtual const member function definition into a implementation outline' })
+end, { desc = 'modify a non virtual const member function definition into a implementation outline' })

@@ -125,6 +125,7 @@ return {
         zls = {},
         clangd = {},
         texlab = {},
+        pylsp = {},
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
