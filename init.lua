@@ -111,6 +111,7 @@ require 'custom-commands'
 -- [[ Adding some custom snippets ]]
 require 'latex-snippets'
 require 'cpp-snippets'
+require 'python-snippets'
 
 -- [[ Adding the ability to open a floating terminal ]]
 require 'floatterminal'
