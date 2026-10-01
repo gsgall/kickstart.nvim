@@ -11,11 +11,11 @@ vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
 })
 
 -- This ensures that a formatter is run on the files before it is saved
-vim.api.nvim_create_autocmd('BufWritePre', {
-  -- uncomment in case the need to specify which files get formatted is needed
-  --  pattern = { '*.cpp', '*.cc', '*.cxx', '*.c++', '*.hpp', '*.h', '*.hxx', '*.h++' },
-  callback = function() vim.lsp.buf.format { async = false } end,
-})
+--vim.api.nvim_create_autocmd('BufWritePre', {
+--  -- uncomment in case the need to specify which files get formatted is needed
+--  --  pattern = { '*.cpp', '*.cc', '*.cxx', '*.c++', '*.hpp', '*.h', '*.hxx', '*.h++' },
+--  callback = function() vim.lsp.buf.format { async = false } end,
+--})
 
 local indent_group = vim.api.nvim_create_augroup('IndentationOverrides', { clear = true })
 
