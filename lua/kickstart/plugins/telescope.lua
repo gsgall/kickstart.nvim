@@ -111,6 +111,18 @@ return {
             '%.dSYM/.*',
           },
         },
+        pickers = {
+          buffers = {
+            mappings = {
+              i = {
+                ['<C-d>'] = require('telescope.actions').delete_buffer,
+              },
+              n = {
+                ['d'] = require('telescope.actions').delete_buffer,
+              },
+            },
+          },
+        },
       }
 
       -- Enable Telescope extensions if they are installed
