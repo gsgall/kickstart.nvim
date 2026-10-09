@@ -112,8 +112,10 @@ require 'custom-commands'
 require 'latex-snippets'
 require 'cpp-snippets'
 require 'python-snippets'
-
+-- [[ Adding config for python indent ]]
+require 'python-indent'
 -- [[ Adding the ability to open a floating terminal ]]
 require 'floatterminal'
--- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+--
+--
