@@ -109,6 +109,7 @@ return {
             '%.gif$',
             '%.dSYM/',
             '%.dSYM/.*',
+            '%__pycache__/%.*',
           },
         },
         pickers = {

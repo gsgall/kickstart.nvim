@@ -96,6 +96,8 @@ vim.opt.wildignore:append {
   '*.gif',
   '*.dSYM',
 }
+-- ignore for python files
+vim.opt.wildignore:append { '__pycache__/*' }
 -- default 4 space indentation for all files and ensuring to tab expand
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
