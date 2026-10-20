@@ -34,7 +34,8 @@ return {
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { 'black' },
+        -- ruff sorts imports first (needs ruff's isort rules, run via `ruff check --select I --fix`), then black formats
+        python = { 'ruff_organize_imports', 'black' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },

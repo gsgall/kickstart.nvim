@@ -126,7 +126,23 @@ return {
         clangd = {},
         texlab = {},
         stylua = {},
-        ruff = {},
+
+        -- Ruff handles linting and code actions; basedpyright handles hover, definition, etc.
+        ruff = {
+          on_attach = function(client)
+            -- Let basedpyright own hover
+            client.server_capabilities.hoverProvider = false
+          end,
+        },
+        basedpyright = {
+          settings = {
+            basedpyright = {
+              -- Import sorting is done by ruff, linting by ruff
+              disableOrganizeImports = true,
+              analysis = { typeCheckingMode = 'standard' },
+            },
+          },
+        },
 
         -- Special Lua Config, as recommended by neovim help docs
         lua_ls = {
@@ -168,6 +184,7 @@ return {
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         -- You can add other tools here that you want Mason to install
+        'black',
       })
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
